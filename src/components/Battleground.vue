@@ -3,18 +3,20 @@
         <h2 v-if="userTurn">Ваш ход</h2>
         <h2 v-else>Ход противника</h2>
 
+
         <div class="battleground">
             <div>
                 <div class="field_label">
                     Ваше поле({{name}})
                 </div>
-                <GameField :is-enemy="false" :user-turn.sync="userTurn" ref="UserField"></GameField>
+                <GameField :is-enemy="false" :user-turn.sync="userTurn" ref="UserField"
+                          ></GameField>
             </div>
             <div>
                 <div class="field_label">
                     Поле вашего противника({{enemyName}})
                 </div>
-                <GameField :is-enemy="true" :user-turn.sync="userTurn"></GameField>
+                <GameField :is-enemy="true" :user-turn.sync="userTurn" ></GameField>
             </div>
         </div>
     </div>
@@ -63,7 +65,8 @@
         text-align: center;
         margin-bottom: 50px;
     }
-    .field_label{
+
+    .field_label {
         margin-bottom: 10px;
     }
 </style>

@@ -1,22 +1,27 @@
 <template>
     <div id="app">
+
         <div class="bg" :class="{dark:start_game }">
-            <div  v-if="!start_game">
-                <h1>Морской бой</h1>
-                <div class="button" @click="step = 2" v-if="step === 1">Играть</div>
-                <form @submit.prevent="StartGame" v-if="step === 2">
-                    <div class="input">
-                        <label for="i1">Ваше имя</label>
-                        <input id="i1" type="text" placeholder="Введите ваше имя" v-model="name" required>
-                    </div>
-                    <div class="input">
-                        <label for="i2">Имя противника</label>
-                        <input id="i2" type="text" placeholder="Введите имя противника" v-model="enemy_name" required>
-                    </div>
-                    <button type="submit" class="button">Начать игру</button>
-                </form>
-            </div>
-            <Battleground v-else :name="name" :enemy-name="enemy_name"></Battleground>
+            <transition name="fade">
+                <div v-if="!start_game">
+                    <h1>Морской бой</h1>
+                    <div class="button" @click="step = 2" v-if="step === 1">Играть</div>
+                    <form @submit.prevent="StartGame" v-if="step === 2">
+                        <div class="input">
+                            <label for="i1">Ваше имя</label>
+                            <input autocomplete="off" id="i1" type="text" placeholder="Введите ваше имя" v-model="name"
+                                   required>
+                        </div>
+                        <div class="input">
+                            <label for="i2">Имя противника</label>
+                            <input id="i2" type="text" placeholder="Введите имя противника" v-model="enemy_name"
+                                   required>
+                        </div>
+                        <button type="submit" class="button">Начать игру</button>
+                    </form>
+                </div>
+                <Battleground v-else :name="name" :enemy-name="enemy_name"></Battleground>
+            </transition>
         </div>
 
     </div>
@@ -58,7 +63,8 @@
         box-sizing: border-box;
         font-family: 'Roboto', sans-serif;
     }
-    h1{
+
+    h1 {
         font-size: 48px;
         font-weight: 700;
         color: #fff;
@@ -67,8 +73,9 @@
         text-align: center;
         margin-bottom: 50px;
     }
+
     .bg {
-min-height: 100vh;
+        min-height: 100vh;
         padding: 30px;
         background: url(https://wows-wowsp-global.gcdn.co/media/ceph-image/1bb1e2ae-ff4b-11eb-8ee6-8cdcd4b147d4.jpg) no-repeat center;
         background-size: cover;
@@ -78,11 +85,23 @@ min-height: 100vh;
         text-align: center;
         flex-direction: column;
         transition: background .3s ease-in-out;
-        &.dark{
-            background:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url(https://wows-wowsp-global.gcdn.co/media/ceph-image/1bb1e2ae-ff4b-11eb-8ee6-8cdcd4b147d4.jpg) no-repeat center / cover;
-            background-size: cover;
+        z-index: 1;
+
+        &.dark {
+            /*&:after{
+                content: '';
+                pointer-events: none;
+                background: rgba(0,0,0,.6);
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                z-index: 0;
+            }*/
         }
     }
+
     .button {
         cursor: pointer;
         text-decoration: none;
@@ -102,23 +121,36 @@ min-height: 100vh;
         color: #fff;
         -webkit-transition: all 0.3s;
         transition: all 0.3s;
+
+        &:hover {
+            opacity: .8;
+        }
+
+        &:disabled {
+            background-image: linear-gradient(to top, #363636 0%, #7e7c7b 100%);
+            pointer-events: none;
+        }
     }
+
     form {
         display: grid;
         grid-gap: 16px;
         width: 100%;
-        max-width: 300px;
-        label{
+        max-width: 340px;
+
+        label {
             color: #ffffff;
             margin-bottom: 5px;
             text-align: left;
             font-size: 14px;
         }
-        .input{
+
+        .input {
             display: grid;
             width: 100%;
         }
-        input{
+
+        input {
             width: 100%;
             border: none;
             height: 46px;

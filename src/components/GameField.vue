@@ -1,7 +1,7 @@
 <template>
     <div>
         <transition name="fade">
-            <div v-if="!shipCount" class="game_result">
+            <div v-if="!!winGame" class="game_result">
                 <h2 v-if="winGame === 'USER'">Вы победили</h2>
                 <h2 v-if="winGame === 'PC'">Вы проиграли</h2>
                 <button @click="reset" class="button">начать заного</button>
@@ -18,7 +18,6 @@
                      style="width: 40px; height: 40px;">
                 <img v-if="item.dead" src="../assets/fire.gif" alt="" style="width: 30px; height: 37px;">
 
-                <small style="position: absolute; font-size: 8px; left: 1px; bottom: 1px">{{item.coords}}</small>
             </div>
         </div>
 
@@ -36,14 +35,14 @@
             return {
                 gridItems: [],
                 shipCount: 0,
-                winGame: '',
                 optionShip: {
                     count: [1, 2, 3, 4],
                     size: [4, 3, 2, 1]
                 },
                 ships: [],
                 collision: new Set(),
-                enemyLastLuckyHit:null
+                enemyLastLuckyHit:null,
+                winGame:''
             }
         },
         mounted() {
@@ -53,7 +52,7 @@
             userFire(cell) {
                 if (!this.shipCount && this.userTurn)
                     return false
-                if (cell.hit === false) {
+                if (cell.hit === false && cell.miss === false) {
                     cell.miss = true
                     this.$emit('update:userTurn', false)
                     for (let i = 0; i < this.ships.length; i++) {
@@ -73,7 +72,6 @@
                             if (life < 0) {
                                 let maybeCell = []
                                 for (const id of ship.location) {
-                                    console.log(id)
                                     this.gridItems.forEach(item => {
                                         if (item.coords === id) {
                                             item.dead = true
@@ -104,7 +102,7 @@
                                 this.shipCount -= 1;
 
                                 if (!this.shipCount) {
-                                    this.winGame = 'USER'
+                                    this.winGame = "USER"
 
                                 }
                             }
@@ -126,11 +124,10 @@
 
                 if (!userField.shipCount && !userField.userTurn)
                     return false
-                let cell = enemyCell ? enemyCell : userField.gridItems[userField.enemyLastLuckyHit  ? this.getCell(userField,cell) : Math.floor(Math.random() * 100)]
-              console.log(enemyCell ,cell.coords)
-                if (cell.hit) {
+                let cell = enemyCell ? enemyCell : userField.gridItems[userField.enemyLastLuckyHit &&  !!this.getCell(userField,cell)  ? this.getCell(userField,cell) : Math.floor(Math.random() * 100)]
+                if (cell.hit || cell.miss) {
                     if(userField.enemyLastLuckyHit){
-                        console.log('userField.enemyLastLuckyHit')
+
                         this.enemyFire(userField.gridItems[this.getCell(userField,cell)])
                     }else{
                         this.enemyFire()
@@ -190,7 +187,7 @@
                                 userField.shipCount -= 1;
 
                                 if (!userField.shipCount) {
-                                    this.winGame = 'PC'
+                                    this.winGame = "PC"
 
                                 }
                             }
@@ -213,14 +210,13 @@
                let notHitItems = []
                 for (const id of maybeCell) {
                     let item = userField.gridItems.find(item => item.coords === id && !item.hit && !item.miss)
-                    console.log('item',item)
+
                     if (item) {
                         notHitItems.push(id)
 
                     }
                 }
-                console.log(notHitItems)
-               return notHitItems[Math.floor(Math.random() * notHitItems.length)]
+               return  parseInt(notHitItems[Math.floor(Math.random() * notHitItems.length)], 10)
 
             },
             createGrid() {
@@ -332,7 +328,7 @@
                 this.userTurn = true
                 this.shipCount = 0
                 this.createGrid()
-                let userField = this.$parent.$children.find(item => item._uid === 3)
+                let userField = this.$parent.$refs.UserField
                 userField.ships = []
                 userField.gridItems = []
                 userField.winGame = ''
@@ -393,8 +389,7 @@ position: relative;
 
         &.miss {
             pointer-events: none;
-            animation: bg_fade .5s .3s ease-in-out forwards;
-            background: #ffffff;
+
         }
         @keyframes bg_fade {
             100% {
@@ -433,6 +428,7 @@ position: relative;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        z-index: 1;
 
         h2 {
             color: #ffffff;
