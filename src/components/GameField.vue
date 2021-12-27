@@ -9,7 +9,7 @@
         </transition>
         <div class="field" :class="{disabled: !shipCount,  enemy_field: isEnemy}">
             <div class="field__cell" v-for="(item, index) of gridItems" :key="index"
-                 :class="{ship: item.ship /*&& !isEnemy*/, hit: item.hit, dead: item.dead,  miss: item.miss}"
+                 :class="{ship: item.ship && !isEnemy, hit: item.hit, dead: item.dead,  miss: item.miss}"
                  @click="isEnemy ? userFire(item) : null">
                 <span v-if="item.miss" class="miss">·
                      <img v-if="item.miss" src="../assets/water.gif" alt="" style="width: 30px; height: 37px;">
