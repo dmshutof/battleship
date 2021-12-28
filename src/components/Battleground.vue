@@ -50,6 +50,12 @@
         div {
             max-width: 400px;
         }
+        @media(max-width: 480px){
+            grid-template-columns: 300px;
+            div {
+                max-width: 400px;
+            }
+        }
     }
 
     * {

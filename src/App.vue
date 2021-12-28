@@ -76,7 +76,7 @@
 
     .bg {
         min-height: 100vh;
-        padding: 30px;
+        padding: 5vw 2.5vw;
         background: url(https://wows-wowsp-global.gcdn.co/media/ceph-image/1bb1e2ae-ff4b-11eb-8ee6-8cdcd4b147d4.jpg) no-repeat center;
         background-size: cover;
         display: flex;

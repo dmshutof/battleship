@@ -347,7 +347,9 @@
         display: grid;
         grid-template-columns: repeat(10, 40px);
         border: 1px solid #b4b4ff;
-
+        @media(max-width: 480px){
+            grid-template-columns: repeat(10, 30px);
+        }
         &.disabled {
             pointer-events: none;
         }
@@ -357,16 +359,18 @@
         .field__cell {
             pointer-events: all;
             position: relative;
-            &:hover {
-                &:before{
-                    content: '';
-                    position: absolute;
-                    width: 100%;
-                    height: 100%;
-                    border: 3px solid #de2414;
-                    left: -3px;
-                    top: -3px;
-                    z-index: 1;
+            @media(min-width: 481px) {
+                &:hover {
+                    &:before {
+                        content: '';
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        border: 3px solid #de2414;
+                        left: -3px;
+                        top: -3px;
+                        z-index: 1;
+                    }
                 }
             }
         }
@@ -381,8 +385,11 @@
         justify-content: center;
         align-items: center;
         pointer-events: none;
-position: relative;
-
+        position: relative;
+@media(max-width: 480px){
+    width: 30px;
+    height: 30px;
+}
         &.ship {
             background: green;
         }
@@ -403,6 +410,12 @@ position: relative;
 
         &.dead {
             background: darkred;
+            img{
+                @media (max-width: 480px) {
+                    width: 30px!important;
+                    height: 25px!important;
+                }
+            }
         }
 
         .miss {
